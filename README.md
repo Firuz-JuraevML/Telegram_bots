@@ -1,6 +1,6 @@
 # Telegram bots
 
-![](https://github.com/Firuz-JuraevML/Telegram_bots/blob/master/botfather.png =250x300)
+<img src="https://github.com/Firuz-JuraevML/Telegram_bots/blob/master/botfather.png" width="200" height="240">
 
 ## Bot List 
 1. Complaint Bot (using pyTelegramBotAPI)
