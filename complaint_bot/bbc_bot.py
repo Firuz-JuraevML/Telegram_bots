@@ -2,7 +2,7 @@ import telebot
 import sqlite3 
 
 
-bot = telebot.TeleBot("1362716886:AAGZVWAl89ruUDkpK8btEsQCb3U2lTaQGv8")
+bot = telebot.TeleBot("token")
 
 language = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False, row_width=2)
 language.row('O\'zbek tili 🇺🇿', 'Русский язык 🇷🇺')
