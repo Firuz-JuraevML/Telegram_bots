@@ -28,15 +28,12 @@ def send_regions(lang):
 	'Qoraqalpog\'iston Respublikasi']
 	regions_uz.add(*uzb_regions)
 
-	regions_ru = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False, row_width=2) 
+	regions_ru = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False, row_width=2)
 	rus_regions = ['Ташкент', 'Андижан', 'Бухарa', 'Ферганa', 'Джизак', 'Хорезм', 'Наманган', 
 	'Навоий', 'Кашкадаря', 'Самарканд', 'Сырдаря', 'Сурхандаря', 'Республика Каракалпакстан']
 	regions_ru.add(*rus_regions)
 
-	if lang == 'O\'zbek tili 🇺🇿':
-		return regions_uz
-	else: 
-		return regions_ru
+	return regions_uz if lang == 'O\'zbek tili 🇺🇿' else regions_ru
 
 
 def write_info(message): 
@@ -81,14 +78,10 @@ def set_step(user, new_step):
 
 def set_lang(user, language): 
 	print (language)
-	conn = sqlite3.connect("bbc_db.db")  
-	if language == 'O\'zbek tili 🇺🇿': 
-		language = 'uzbekcha'
-	else: 
-		language = 'ruscha'
-	
+	conn = sqlite3.connect("bbc_db.db")
+	language = 'uzbekcha' if language == 'O\'zbek tili 🇺🇿' else 'ruscha'
 	print (language)
-	query = "UPDATE user_step SET language = '{lang}' WHERE user_id = {user_id};".format(lang=language, user_id=user) 
+	query = "UPDATE user_step SET language = '{lang}' WHERE user_id = {user_id};".format(lang=language, user_id=user)
 	conn.execute(query)
 	conn.commit()
 	conn.close() 
@@ -120,7 +113,7 @@ def send_welcome(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
 	print (get_step(message.from_user.id))
-	bot.forward_message("-1001464294052", message.chat.id, message.message_id) 
+	bot.forward_message("-1001464294052", message.chat.id, message.message_id)
 	if get_step(message.from_user.id) == 'lang':
 		set_lang(message.from_user.id, message.text) 
 		set_step(message.from_user.id, 'reg')
@@ -128,7 +121,7 @@ def send_text(message):
 			bot.send_message(message.chat.id, 'Viloyatingizni tanlang: ', reply_markup=send_regions(message.text))
 		elif message.text == 'Русский язык 🇷🇺': 
 			bot.send_message(message.chat.id, 'Выберите свой регион: ', reply_markup=send_regions(message.text))
-		
+
 	elif get_step(message.from_user.id) == 'reg':
 		set_region(message.from_user.id, message.text)
 
@@ -139,8 +132,8 @@ def send_text(message):
 			bot.send_message(message.chat.id, 'Введите вашу жалобу (Вы можете ввести материал СМИ в качестве доказательства): ', reply_markup=remove_markup)
 
 		set_step(message.from_user.id, 'additional')
-		
-	elif message.text == "Отправка данных 📨" or message.text == "Ma\'lumotlarni jo\'natish  📨":
+
+	elif message.text in ["Отправка данных 📨", "Ma\'lumotlarni jo\'natish  📨"]:
 		set_complain(message.from_user.id, message.text)
 		keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
@@ -150,7 +143,7 @@ def send_text(message):
 			bot.send_message(message.chat.id, 
 									"Sizning raqamingiz: ", 
 									reply_markup=keyboard)
-			
+
 		else: 
 			reg_button = telebot.types.KeyboardButton(text="Поделиться номером 📞", request_contact=True)
 			keyboard.add(reg_button)
